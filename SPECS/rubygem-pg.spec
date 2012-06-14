@@ -1,26 +1,25 @@
-%define rbname pg
-%define version 0.13.2
-%define release 2
+# Generated from pg-0.13.2.gem by gem2rpm -*- rpm-spec -*-
+%global gemname pg
+
+%global gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global geminstdir %{gemdir}/gems/%{gemname}-%{version}
+%global rubyabi 1.8
 
 Summary: Pg is the Ruby interface to the {PostgreSQL RDBMS}[http://www.postgresql.org/]
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gemname}
+Version: 0.13.2
+Release: 2%{?dist}
+Group: Development/Languages
+License: BSD and Ruby and GPL
 URL: https://bitbucket.org/ged/ruby-pg
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gemname}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.7
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: ruby(rubygems) 
 BuildRequires: ruby >= 1.8.7
-BuildRequires: rubygems >= 1.8.10
-BuildRequires: postgresql-devel
-Provides: rubygem(pg) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gemname}) = %{version}
 
 %description
 Pg is the Ruby interface to the {PostgreSQL
@@ -32,7 +31,7 @@ require 'pg'
 # Output a table of current connections to the DB
 conn = PG.connect( dbname: 'sales' )
 conn.exec( "SELECT * FROM pg_stat_activity" ) do |result|
-puts "     PID | User             | Query"
+puts "  PID | User | Query"
 result.each do |row|
 puts " %7d | %-16s | %s " %
 row.values_at('procpid', 'usename', 'current_query')
@@ -40,48 +39,44 @@ end
 end
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gemdir}
+export CONFIGURE_ARGS="--with-cflags='%{optflags}'"
+gem install --local --install-dir .%{gemdir} \
+-V \
+--force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gemdir}
+cp -a .%{gemdir}/* \
+  %{buildroot}%{gemdir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+# Remove the binary extension sources and build leftovers.
+rm -rf %{buildroot}%{geminstdir}/ext
 
 %files
-%defattr(-, root, root)
+%dir %{geminstdir}
+%{geminstdir}/lib
+%exclude %{gemdir}/cache/%{gemname}-%{version}.gem
+%{gemdir}/specifications/%{gemname}-%{version}.gemspec
 %{gemdir}/gems/pg-0.13.2/.gemtest
 %{gemdir}/gems/pg-0.13.2/BSDL
 %{gemdir}/gems/pg-0.13.2/ChangeLog
-%doc %{gemdir}/gems/pg-0.13.2/Contributors.rdoc
-%doc %{gemdir}/gems/pg-0.13.2/History.rdoc
-%doc %{gemdir}/gems/pg-0.13.2/LICENSE
-%doc %{gemdir}/gems/pg-0.13.2/Manifest.txt
-%doc %{gemdir}/gems/pg-0.13.2/POSTGRES
-%doc %{gemdir}/gems/pg-0.13.2/README-OS_X.rdoc
-%doc %{gemdir}/gems/pg-0.13.2/README-Windows.rdoc
-%doc %{gemdir}/gems/pg-0.13.2/README.ja.rdoc
-%doc %{gemdir}/gems/pg-0.13.2/README.rdoc
 %{gemdir}/gems/pg-0.13.2/Rakefile
 %{gemdir}/gems/pg-0.13.2/Rakefile.cross
-%{gemdir}/gems/pg-0.13.2/ext/extconf.rb
-%doc %{gemdir}/gems/pg-0.13.2/ext/pg.c
-%{gemdir}/gems/pg-0.13.2/ext/pg.h
-%doc %{gemdir}/gems/pg-0.13.2/ext/pg_connection.c
-%doc %{gemdir}/gems/pg-0.13.2/ext/pg_result.c
-%{gemdir}/gems/pg-0.13.2/ext/vc/pg.sln
-%{gemdir}/gems/pg-0.13.2/ext/vc/pg_18/pg.vcproj
-%{gemdir}/gems/pg-0.13.2/ext/vc/pg_19/pg_19.vcproj
-%{gemdir}/gems/pg-0.13.2/lib/pg.rb
-%{gemdir}/gems/pg-0.13.2/lib/pg/connection.rb
-%{gemdir}/gems/pg-0.13.2/lib/pg/constants.rb
-%{gemdir}/gems/pg-0.13.2/lib/pg/exceptions.rb
-%{gemdir}/gems/pg-0.13.2/lib/pg/result.rb
 %{gemdir}/gems/pg-0.13.2/sample/async_api.rb
 %{gemdir}/gems/pg-0.13.2/sample/async_copyto.rb
 %{gemdir}/gems/pg-0.13.2/sample/async_mixed.rb
@@ -97,19 +92,22 @@ gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
 %{gemdir}/gems/pg-0.13.2/spec/pg/connection_spec.rb
 %{gemdir}/gems/pg-0.13.2/spec/pg/result_spec.rb
 %{gemdir}/gems/pg-0.13.2/spec/pg_spec.rb
-%{gemdir}/gems/pg-0.13.2/ext/Makefile
-%{gemdir}/gems/pg-0.13.2/ext/extconf.h
-%{gemdir}/gems/pg-0.13.2/ext/mkmf.log
-%{gemdir}/gems/pg-0.13.2/ext/pg.o
-%{gemdir}/gems/pg-0.13.2/ext/pg_connection.o
-%{gemdir}/gems/pg-0.13.2/ext/pg_ext.so
-%{gemdir}/gems/pg-0.13.2/ext/pg_result.o
-%{gemdir}/gems/pg-0.13.2/lib/pg_ext.so
 
-%doc %{gemdir}/doc/pg-0.13.2
-%{gemdir}/cache/pg-0.13.2.gem
-%{gemdir}/specifications/pg-0.13.2.gemspec
+%files doc
+%doc %{gemdir}/doc/%{gemname}-%{version}
+%doc %{geminstdir}/Manifest.txt
+%doc %{geminstdir}/Contributors.rdoc
+%doc %{geminstdir}/History.rdoc
+%doc %{geminstdir}/README-OS_X.rdoc
+%doc %{geminstdir}/README-Windows.rdoc
+%doc %{geminstdir}/README.ja.rdoc
+%doc %{geminstdir}/README.rdoc
+%doc %{geminstdir}/POSTGRES
+%doc %{geminstdir}/LICENSE
+
 
 %changelog
 * Tue May 08 2012 jmontleo@redhat.com - 0.13.2-2
 - Cleaned up spec file
+* Tue Apr 10 2012 jason - 0.13.2-1
+- Initial package

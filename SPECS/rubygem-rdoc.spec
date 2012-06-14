@@ -283,4 +283,3 @@ mkdir -p %{buildroot}/%{_bindir}
 %changelog
 * Tue May 08 2012 jmontleo@redhat.com - 3.12-2
 - Cleaned up spec file
-

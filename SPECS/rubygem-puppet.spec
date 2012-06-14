@@ -1804,7 +1804,8 @@ rm %{buildroot}/%{gemdir}/gems/puppet-2.7.12/conf/gentoo/puppet/puppet.conf
 /usr/lib/ruby/gems/1.8/bin/puppetqd
 /usr/lib/ruby/gems/1.8/bin/puppetrun
 /usr/lib/ruby/gems/1.8/bin/ralsh
-
+/usr/lib/ruby/gems/1.8/gems/puppet-2.7.12/lib/puppet/provider/package/yumhelper.pyc
+/usr/lib/ruby/gems/1.8/gems/puppet-2.7.12/lib/puppet/provider/package/yumhelper.pyo
 
 %{gemdir}/cache/puppet-2.7.12.gem
 %{gemdir}/specifications/puppet-2.7.12.gemspec

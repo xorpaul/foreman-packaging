@@ -1,46 +1,66 @@
-%define rbname mysql2
-%define version 0.3.11
-%define release 2
+# Generated from mysql2-0.3.11.gem by gem2rpm -*- rpm-spec -*-
+%global gemname mysql2
+
+%global gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global geminstdir %{gemdir}/gems/%{gemname}-%{version}
+%global rubyabi 1.8
 
 Summary: A simple, fast Mysql library for Ruby, binding to libmysql
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gemname}
+Version: 0.3.11
+Release: 2%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://github.com/brianmario/mysql2
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gemname}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby 
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: ruby(rubygems) 
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
-BuildRequires: mysql-devel
-Provides: rubygem(mysql2) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gemname}) = %{version}
 
 %description
 
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gemdir}
+export CONFIGURE_ARGS="--with-cflags='%{optflags}'"
+gem install --local --install-dir .%{gemdir} \
+-V \
+--force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gemdir}
+cp -a .%{gemdir}/* \
+  %{buildroot}%{gemdir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+# Remove the binary extension sources and build leftovers.
+rm -rf %{buildroot}%{geminstdir}/ext
 
 %files
-%defattr(-, root, root)
+%dir %{geminstdir}
+%{geminstdir}/lib
+%exclude %{gemdir}/cache/%{gemname}-%{version}.gem
+%{gemdir}/specifications/%{gemname}-%{version}.gemspec
+
+%files doc
+%doc %{gemdir}/doc/%{gemname}-%{version}
 %{gemdir}/gems/mysql2-0.3.11/.gitignore
 %{gemdir}/gems/mysql2-0.3.11/.rspec
 %{gemdir}/gems/mysql2-0.3.11/.rvmrc
@@ -61,20 +81,6 @@ gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
 %{gemdir}/gems/mysql2-0.3.11/benchmark/threaded.rb
 %{gemdir}/gems/mysql2-0.3.11/examples/eventmachine.rb
 %{gemdir}/gems/mysql2-0.3.11/examples/threaded.rb
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/client.c
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/client.h
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/extconf.rb
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/mysql2_ext.c
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/mysql2_ext.h
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/result.c
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/result.h
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/wait_for_single_fd.h
-%{gemdir}/gems/mysql2-0.3.11/lib/mysql2.rb
-%{gemdir}/gems/mysql2-0.3.11/lib/mysql2/client.rb
-%{gemdir}/gems/mysql2-0.3.11/lib/mysql2/em.rb
-%{gemdir}/gems/mysql2-0.3.11/lib/mysql2/error.rb
-%{gemdir}/gems/mysql2-0.3.11/lib/mysql2/result.rb
-%{gemdir}/gems/mysql2-0.3.11/lib/mysql2/version.rb
 %{gemdir}/gems/mysql2-0.3.11/mysql2.gemspec
 %{gemdir}/gems/mysql2-0.3.11/spec/em/em_spec.rb
 %{gemdir}/gems/mysql2-0.3.11/spec/mysql2/client_spec.rb
@@ -86,18 +92,9 @@ gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
 %{gemdir}/gems/mysql2-0.3.11/tasks/compile.rake
 %{gemdir}/gems/mysql2-0.3.11/tasks/rspec.rake
 %{gemdir}/gems/mysql2-0.3.11/tasks/vendor_mysql.rake
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/Makefile
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/client.o
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/mkmf.log
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/mysql2.so
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/mysql2_ext.o
-%{gemdir}/gems/mysql2-0.3.11/ext/mysql2/result.o
-%{gemdir}/gems/mysql2-0.3.11/lib/mysql2/mysql2.so
-
-%doc %{gemdir}/doc/mysql2-0.3.11
-%{gemdir}/cache/mysql2-0.3.11.gem
-%{gemdir}/specifications/mysql2-0.3.11.gemspec
 
 %changelog
 * Tue May 08 2012 jmontleo@redhat.com - 0.3.11-2
 - Cleaned up spec file
+* Tue Apr 10 2012 jason - 0.3.11-1
+- Initial package

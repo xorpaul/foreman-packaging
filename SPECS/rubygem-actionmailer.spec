@@ -5,6 +5,7 @@
 Summary: Email composition, delivery, and receiving framework (part of Rails).
 Name: rubygem-%{rbname}
 
+Epoch: 1
 Version: %{version}
 Release: %{release}%{dist}
 Group: Development/Ruby
@@ -24,7 +25,7 @@ BuildRequires: ruby >= 1.8.7
 BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
 Provides: rubygem(actionmailer) = %{version}
-
+Provides: %{name} = %{version}
 %define gemdir /usr/lib/ruby/gems/1.8
 %define gembuilddir %{buildroot}%{gemdir}
 

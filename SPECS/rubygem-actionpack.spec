@@ -5,12 +5,14 @@
 Summary: Web-flow and rendering framework putting the VC in MVC (part of Rails).
 Name: rubygem-%{rbname}
 
+Epoch: 1
 Version: %{version}
 Release: %{release}%{dist}
 Group: Development/Ruby
 License: Distributable
 URL: http://www.rubyonrails.org
 Source0: %{rbname}-%{version}.gem
+Patch0: 0001-fix-actionpack-dependencies.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Requires: ruby >= 1.8.7
 Requires: rubygems >= 1.8.10
@@ -26,13 +28,13 @@ Requires: rubygem-i18n => 0.5.0
 Requires: rubygem-i18n < 0.6
 
 Requires: rubygem-rack => 1.2.5
-Requires: rubygem-rack < 1.3
+Requires: rubygem-rack < 1:1.3.1
 
 Requires: rubygem-rack-test => 0.5.7
-Requires: rubygem-rack-test < 0.6
+Requires: rubygem-rack-test < 0.6.1
 
 Requires: rubygem-rack-mount => 0.6.14
-Requires: rubygem-rack-mount < 0.7
+Requires: rubygem-rack-mount < 0.7.2
 
 Requires: rubygem-tzinfo => 0.3.23
 Requires: rubygem-tzinfo < 0.4
@@ -43,6 +45,7 @@ BuildRequires: ruby >= 1.8.7
 BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
 Provides: rubygem(actionpack) = %{version}
+Provides: %{name} = %{version}
 
 %define gemdir /usr/lib/ruby/gems/1.8
 %define gembuilddir %{buildroot}%{gemdir}
@@ -61,6 +64,10 @@ MVC web applications. Works with any Rack-compatible server.
 %{__rm} -rf %{buildroot}
 mkdir -p %{gembuilddir}
 gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+cd %{gembuilddir}
+cp %{PATCH0} ./
+patch -p0 < ./0001-fix-actionpack-dependencies.patch
+rm ./0001-fix-actionpack-dependencies.patch
 
 %clean
 %{__rm} -rf %{buildroot}

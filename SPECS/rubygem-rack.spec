@@ -1,11 +1,10 @@
 %define rbname rack
 %define version 1.2.5
-%define release 4
+%define release 2
 
 Summary: a modular Ruby webserver interface
 Name: rubygem-%{rbname}
 
-Epoch: 1
 Version: %{version}
 Release: %{release}%{dist}
 Group: Development/Ruby
@@ -19,7 +18,6 @@ BuildRequires: ruby
 BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
 Provides: rubygem(rack) = %{version}
-Provides: %{name} = %{version}
 
 %define gemdir /usr/lib/ruby/gems/1.8
 %define gembuilddir %{buildroot}%{gemdir}
@@ -187,6 +185,8 @@ rmdir %{gembuilddir}/bin
 %{gemdir}/gems/rack-1.2.5/Rakefile
 %doc %{gemdir}/gems/rack-1.2.5/README
 %doc %{gemdir}/gems/rack-1.2.5/SPEC
+
+
 %doc %{gemdir}/doc/rack-1.2.5
 %{gemdir}/cache/rack-1.2.5.gem
 %{gemdir}/specifications/rack-1.2.5.gemspec

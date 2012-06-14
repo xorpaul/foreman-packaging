@@ -1,26 +1,25 @@
-%define rbname sqlite3
-%define version 1.3.5
-%define release 2
+# Generated from sqlite3-1.3.5.gem by gem2rpm -*- rpm-spec -*-
+%global gemname sqlite3
+
+%global gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global geminstdir %{gemdir}/gems/%{gemname}-%{version}
+%global rubyabi 1.8
 
 Summary: This module allows Ruby programs to interface with the SQLite3 database engine (http://www.sqlite.org)
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gemname}
+Version: 1.3.5
+Release: 2%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://github.com/luislavena/sqlite3-ruby
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gemname}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) >= 1.3.5
 Requires: ruby >= 1.8.7
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: ruby(rubygems) >= 1.3.5
 BuildRequires: ruby >= 1.8.7
-BuildRequires: rubygems >= 1.8.10
-BuildRequires: sqlite-devel
-Provides: rubygem(sqlite3) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gemname}) = %{version}
 
 %description
 This module allows Ruby programs to interface with the SQLite3
@@ -29,51 +28,45 @@ SQLite engine installed in order to build this module.
 Note that this module is only compatible with SQLite 3.6.16 or newer.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gemdir}
+export CONFIGURE_ARGS="--with-cflags='%{optflags}'"
+gem install --local --install-dir .%{gemdir} \
+-V \
+--force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gemdir}
+cp -a .%{gemdir}/* \
+  %{buildroot}%{gemdir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+# Remove the binary extension sources and build leftovers.
+rm -rf %{buildroot}%{geminstdir}/ext
 
 %files
-%defattr(-, root, root)
-%doc %{gemdir}/gems/sqlite3-1.3.5/API_CHANGES.rdoc
-%doc %{gemdir}/gems/sqlite3-1.3.5/CHANGELOG.rdoc
+%dir %{geminstdir}
+%{geminstdir}/lib
+%exclude %{gemdir}/cache/%{gemname}-%{version}.gem
+%{gemdir}/specifications/%{gemname}-%{version}.gemspec
+%{gemdir}/gems/sqlite3-1.3.5/.gemtest
 %{gemdir}/gems/sqlite3-1.3.5/ChangeLog.cvs
 %{gemdir}/gems/sqlite3-1.3.5/LICENSE
-%doc %{gemdir}/gems/sqlite3-1.3.5/Manifest.txt
-%doc %{gemdir}/gems/sqlite3-1.3.5/README.rdoc
 %{gemdir}/gems/sqlite3-1.3.5/Rakefile
-%doc %{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/backup.c
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/backup.h
-%doc %{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/database.c
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/database.h
-%doc %{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/exception.c
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/exception.h
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/extconf.rb
-%doc %{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/sqlite3.c
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/sqlite3_ruby.h
-%doc %{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/statement.c
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/statement.h
 %{gemdir}/gems/sqlite3-1.3.5/faq/faq.rb
 %{gemdir}/gems/sqlite3-1.3.5/faq/faq.yml
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/constants.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/database.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/errors.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/pragmas.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/resultset.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/statement.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/translator.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/value.rb
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/version.rb
 %{gemdir}/gems/sqlite3-1.3.5/setup.rb
 %{gemdir}/gems/sqlite3-1.3.5/tasks/faq.rake
 %{gemdir}/gems/sqlite3-1.3.5/tasks/gem.rake
@@ -94,21 +87,17 @@ gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
 %{gemdir}/gems/sqlite3-1.3.5/test/test_sqlite3.rb
 %{gemdir}/gems/sqlite3-1.3.5/test/test_statement.rb
 %{gemdir}/gems/sqlite3-1.3.5/test/test_statement_execute.rb
-%{gemdir}/gems/sqlite3-1.3.5/.gemtest
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/Makefile
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/backup.o
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/database.o
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/exception.o
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/mkmf.log
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/sqlite3.o
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/sqlite3_native.so
-%{gemdir}/gems/sqlite3-1.3.5/ext/sqlite3/statement.o
-%{gemdir}/gems/sqlite3-1.3.5/lib/sqlite3/sqlite3_native.so
-%doc %{gemdir}/doc/sqlite3-1.3.5
-%{gemdir}/cache/sqlite3-1.3.5.gem
-%{gemdir}/specifications/sqlite3-1.3.5.gemspec
+
+%files doc
+%doc %{gemdir}/doc/%{gemname}-%{version}
+%doc %{geminstdir}/Manifest.txt
+%doc %{geminstdir}/README.rdoc
+%doc %{geminstdir}/CHANGELOG.rdoc
+%doc %{geminstdir}/API_CHANGES.rdoc
+
 
 %changelog
 * Tue May 08 2012 jmontleo@redhat.com - 1.3.5-2
 - Cleaned up spec file
-
+* Tue Apr 10 2012 jason - 1.3.5-1
+- Initial package

@@ -186,11 +186,10 @@ gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
 %{gemdir}/gems/mail-2.3.3/lib/tasks/corpus.rake
 %{gemdir}/gems/mail-2.3.3/lib/tasks/treetop.rake
 %{gemdir}/gems/mail-2.3.3/lib/VERSION
-
-
 %doc %{gemdir}/doc/mail-2.3.3
 %{gemdir}/cache/mail-2.3.3.gem
 %{gemdir}/specifications/mail-2.3.3.gemspec
+
 %changelog
 * Tue May 08 2012 jmontleo@redhat.com - 2.3.3-2
 - Cleaned up spec file

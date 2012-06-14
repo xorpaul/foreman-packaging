@@ -1,105 +1,85 @@
-%define rbname ruby-libvirt
-%define version 0.4.0
-%define release 2
+# Generated from ruby-libvirt-0.4.0.gem by gem2rpm -*- rpm-spec -*-
+%global gemname ruby-libvirt
+
+%global gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%global geminstdir %{gemdir}/gems/%{gemname}-%{version}
+%global rubyabi 1.8
 
 Summary: Ruby bindings for LIBVIRT
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gemname}
+Version: 0.4.0
+Release: 2%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://libvirt.org/ruby/
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gemname}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.1
-Requires: rubygems >= 1.8.10
-BuildRequires: libvirt-devel
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: ruby(rubygems) 
 BuildRequires: ruby >= 1.8.1
-BuildRequires: rubygems >= 1.8.10
-Provides: rubygem(ruby-libvirt) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gemname}) = %{version}
 
 %description
 Ruby bindings for libvirt.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gemdir}
+export CONFIGURE_ARGS="--with-cflags='%{optflags}'"
+gem install --local --install-dir .%{gemdir} \
+            -V \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gemdir}
+cp -a .%{gemdir}/* \
+        %{buildroot}%{gemdir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+# Remove the binary extension sources and build leftovers.
+rm -rf %{buildroot}%{geminstdir}/ext
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/ruby-libvirt-0.4.0/Rakefile
+%dir %{geminstdir}
+%{geminstdir}/lib
+%exclude %{gemdir}/cache/%{gemname}-%{version}.gem
+%{gemdir}/specifications/%{gemname}-%{version}.gemspec
+
+%files doc
+%doc %{gemdir}/doc/%{gemname}-%{version}
 %{gemdir}/gems/ruby-libvirt-0.4.0/COPYING
-%{gemdir}/gems/ruby-libvirt-0.4.0/README
 %{gemdir}/gems/ruby-libvirt-0.4.0/NEWS
+%{gemdir}/gems/ruby-libvirt-0.4.0/README
 %{gemdir}/gems/ruby-libvirt-0.4.0/README.rdoc
-%{gemdir}/gems/ruby-libvirt-0.4.0/lib/libvirt.rb
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/domain.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/domain.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/network.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/secret.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/secret.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/stream.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/storage.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/storage.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/_libvirt.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/interface.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/network.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/nwfilter.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/connect.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/common.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/connect.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/common.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/interface.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/nodedevice.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/nodedevice.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/stream.c
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/nwfilter.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/extconf.rb
+%{gemdir}/gems/ruby-libvirt-0.4.0/Rakefile
+%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_conn.rb
+%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_domain.rb
 %{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_interface.rb
 %{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_network.rb
+%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_nodedevice.rb
 %{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_nwfilter.rb
-%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_utils.rb
-%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_domain.rb
-%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_storage.rb
 %{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_open.rb
 %{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_secret.rb
-%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_conn.rb
-%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_nodedevice.rb
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/Makefile
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/_libvirt.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/_libvirt.so
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/common.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/connect.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/domain.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/extconf.h
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/interface.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/mkmf.log
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/network.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/nodedevice.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/nwfilter.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/secret.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/storage.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/ext/libvirt/stream.o
-%{gemdir}/gems/ruby-libvirt-0.4.0/lib/_libvirt.so
-%doc %{gemdir}/doc/ruby-libvirt-0.4.0
-%{gemdir}/cache/ruby-libvirt-0.4.0.gem
-%{gemdir}/specifications/ruby-libvirt-0.4.0.gemspec
+%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_storage.rb
+%{gemdir}/gems/ruby-libvirt-0.4.0/tests/test_utils.rb
+
 
 %changelog
 * Tue May 08 2012 jmontleo@redhat.com - 0.4.0-2
 - Cleaned up spec file
-
+* Tue Apr 10 2012 jason - 0.4.0-1
+- Initial package
