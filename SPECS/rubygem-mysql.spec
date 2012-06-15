@@ -1,26 +1,22 @@
-%define rbname mysql
-%define version 2.8.1
-%define release 2
+# Generated from mysql-2.8.1.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name mysql
+%global rubyabi 1.9.1
 
 Summary: This is the MySQL API module for Ruby
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gem_name}
+Version: 2.8.1
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://mysql-win.rubyforge.org
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.6
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby >= 1.8.6
-BuildRequires: rubygems >= 1.8.10
-BuildRequires: mysql-devel
-Provides: rubygem(mysql) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 This is the MySQL API module for Ruby. It provides the same functions for Ruby
@@ -28,49 +24,52 @@ programs that the MySQL C API provides for C programs.
 This is a conversion of tmtm's original extension into a proper RubyGems.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+export CONFIGURE_ARGS="--with-cflags='%{optflags}'"
+gem install --local --install-dir .%{gem_dir} \
+            -V \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+mkdir -p %{buildroot}%{gem_extdir}/lib
+# TODO: move the extensions
+##mv %{buildroot}%{gem_instdir}/lib/shared_object.so %{buildroot}%{gem_extdir}/lib/
+
+
+
+# Remove the binary extension sources and build leftovers.
+rm -rf %{buildroot}%{geminstdir}/ext
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/mysql-2.8.1/COPYING
-%{gemdir}/gems/mysql-2.8.1/COPYING.ja
-%doc %{gemdir}/gems/mysql-2.8.1/History.txt
-%doc %{gemdir}/gems/mysql-2.8.1/Manifest.txt
-%doc %{gemdir}/gems/mysql-2.8.1/README.txt
-%{gemdir}/gems/mysql-2.8.1/Rakefile
-%{gemdir}/gems/mysql-2.8.1/ext/mysql_api/extconf.rb
-%{gemdir}/gems/mysql-2.8.1/ext/mysql_api/mysql.c
-%{gemdir}/gems/mysql-2.8.1/extra/README.html
-%{gemdir}/gems/mysql-2.8.1/extra/README_ja.html
-%{gemdir}/gems/mysql-2.8.1/extra/tommy.css
-%{gemdir}/gems/mysql-2.8.1/lib/mysql.rb
-%{gemdir}/gems/mysql-2.8.1/tasks/gem.rake
-%{gemdir}/gems/mysql-2.8.1/tasks/native.rake
-%{gemdir}/gems/mysql-2.8.1/tasks/vendor_mysql.rake
-%{gemdir}/gems/mysql-2.8.1/test/test_mysql.rb
-   /usr/lib/ruby/gems/1.8/gems/mysql-2.8.1/ext/mysql_api/Makefile
-   /usr/lib/ruby/gems/1.8/gems/mysql-2.8.1/ext/mysql_api/error_const.h
-   /usr/lib/ruby/gems/1.8/gems/mysql-2.8.1/ext/mysql_api/mkmf.log
-   /usr/lib/ruby/gems/1.8/gems/mysql-2.8.1/ext/mysql_api/mysql.o
-   /usr/lib/ruby/gems/1.8/gems/mysql-2.8.1/ext/mysql_api/mysql_api.so
-   /usr/lib/ruby/gems/1.8/gems/mysql-2.8.1/lib/mysql_api.so
-
-
-%doc %{gemdir}/doc/mysql-2.8.1
-%{gemdir}/cache/mysql-2.8.1.gem
-%{gemdir}/specifications/mysql-2.8.1.gemspec
+%dir %{gem_instdir}
+%{gem_libdir}
+%{gem_extdir}
+%exclude %{gem_cache}
+%{gem_spec}
+/usr/share/gems/gems/mysql-2.8.1/
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/History.txt
+%doc %{gem_instdir}/Manifest.txt
+%doc %{gem_instdir}/README.txt
 
 %changelog
-* Tue May 08 2012 jmontleo@redhat.com - 2.8.1-2
-- Cleaned up spec file
+* Thu Jun 14 2012 jason - 2.8.1-1
+- Initial package

@@ -19,7 +19,7 @@ BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:  noarch
 
-Requires: ruby(abi) = 1.8
+Requires: ruby(abi) = 1.9.1
 Requires: rubygems
 Requires: facter
 Requires: puppet >= 0.24.4

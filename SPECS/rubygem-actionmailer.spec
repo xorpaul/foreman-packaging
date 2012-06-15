@@ -1,82 +1,72 @@
-%define rbname actionmailer
-%define version 3.0.14
-%define release 1
+# Generated from actionmailer-3.0.14.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name actionmailer
+%global rubyabi 1.9.1
 
-Summary: Email composition, delivery, and receiving framework (part of Rails).
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: Email composition, delivery, and receiving framework (part of Rails)
+Name: rubygem-%{gem_name}
+Epoch: 1
+Version: 3.0.14
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://www.rubyonrails.org
-Source0: %{rbname}-%{version}.gem
-Patch0: ./0001-rubygem-actionmailer-fix-dep-versions.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Patch0: 0001-rubygem-actionmailer-fix-dep-versions.patch
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.7
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-actionpack = 3.0.14
-
-Requires: rubygem-mail => 2.2.19
-Requires: rubygem-mail > 2.3
+Requires: rubygem(actionpack) = 3.0.14
+Requires: rubygem(mail) => 2.2.19
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby >= 1.8.7
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(actionmailer) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
-
+Provides: rubygem(%{gem_name}) = %{version}
+Provides: %{name} = %{version}
 %description
 Email on Rails. Compose, deliver, receive, and test emails using the familiar
 controller/view pattern. First-class support for multipart email and
 attachments.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
-cd %{gembuilddir}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
+cd %{buildroot}%{gem_dir} 
 cp %{PATCH0} ./
 patch -p0 < ./0001-rubygem-actionmailer-fix-dep-versions.patch
 rm ./0001-rubygem-actionmailer-fix-dep-versions.patch
 
-%clean
-%{__rm} -rf %{buildroot}
-
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/actionmailer-3.0.14/CHANGELOG
-%{gemdir}/gems/actionmailer-3.0.14/README.rdoc
-%{gemdir}/gems/actionmailer-3.0.14/MIT-LICENSE
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/adv_attr_accessor.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/base.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/collector.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/delivery_methods.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/deprecated_api.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/log_subscriber.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/mail_helper.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/old_api.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/railtie.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/test_case.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/test_helper.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/tmail_compat.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer/version.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/action_mailer.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/rails/generators/mailer/mailer_generator.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/rails/generators/mailer/templates/mailer.rb
-%{gemdir}/gems/actionmailer-3.0.14/lib/rails/generators/mailer/USAGE
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
 
-
-%doc %{gemdir}/doc/actionmailer-3.0.14
-%{gemdir}/cache/actionmailer-3.0.14.gem
-%{gemdir}/specifications/actionmailer-3.0.14.gemspec
+%files doc
+%doc %{gem_docdir}
+%doc /usr/share/gems/gems/actionmailer-3.0.14/CHANGELOG
+%doc /usr/share/gems/gems/actionmailer-3.0.14/MIT-LICENSE
+%doc /usr/share/gems/gems/actionmailer-3.0.14/README.rdoc
 
 %changelog
+* Thu Jun 14 2012 jason - 3.0.14-1
+- Initial package

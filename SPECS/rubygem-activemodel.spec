@@ -1,97 +1,74 @@
-%define rbname activemodel
-%define version 3.0.14
-%define release 1
+# Generated from activemodel-3.0.14.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name activemodel
+%global rubyabi 1.9.1
 
-Summary: A toolkit for building modeling frameworks (part of Rails).
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: A toolkit for building modeling frameworks (part of Rails)
+Name: rubygem-%{gem_name}
+Epoch: 1
+Version: 3.0.14
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://www.rubyonrails.org
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.7
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-activesupport = 3.0.14
-
-Requires: rubygem-builder => 2.1.2
-Requires: rubygem-builder < 2.2
-
-Requires: rubygem-i18n => 0.5.0
-Requires: rubygem-i18n < 0.6
+Requires: rubygem(activesupport) = 3.0.14
+Requires: rubygem(builder) => 2.1.2
+Requires: rubygem(builder) < 2.2
+Requires: rubygem(i18n) => 0.5.0
+Requires: rubygem(i18n) < 0.6
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby >= 1.8.7
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(activemodel) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
-
+Provides: rubygem(%{gem_name}) = %{version}
+Provides: %{name} = %{version}
 %description
 A toolkit for building modeling frameworks like Active Record and Active
 Resource. Rich support for attributes, callbacks, validations, observers,
 serialization, internationalization, and testing.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/activemodel-3.0.14/CHANGELOG
-%{gemdir}/gems/activemodel-3.0.14/MIT-LICENSE
-%{gemdir}/gems/activemodel-3.0.14/README.rdoc
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/attribute_methods.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/callbacks.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/conversion.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/deprecated_error_methods.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/dirty.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/errors.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/lint.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/locale/en.yml
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/mass_assignment_security/permission_set.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/mass_assignment_security/sanitizer.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/mass_assignment_security.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/naming.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/observing.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/railtie.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/serialization.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/serializers/json.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/serializers/xml.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/test_case.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/translation.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/acceptance.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/callbacks.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/confirmation.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/exclusion.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/format.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/inclusion.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/length.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/numericality.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/presence.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/validates.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations/with.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validations.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/validator.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model/version.rb
-%{gemdir}/gems/activemodel-3.0.14/lib/active_model.rb
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
 
-
-%doc %{gemdir}/doc/activemodel-3.0.14
-%{gemdir}/cache/activemodel-3.0.14.gem
-%{gemdir}/specifications/activemodel-3.0.14.gemspec
+%files doc
+%doc %{gem_docdir}
+%doc /usr/share/gems/gems/activemodel-3.0.14/CHANGELOG
+%doc /usr/share/gems/gems/activemodel-3.0.14/MIT-LICENSE
+%doc /usr/share/gems/gems/activemodel-3.0.14/README.rdoc
 
 %changelog
+* Thu Jun 14 2012 jason - 3.0.14-1
+- Initial package

@@ -1,67 +1,66 @@
-%define rbname hirb-unicode
-%define version 0.0.5
-%define release 1
+# Generated from hirb-unicode-0.0.5.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name hirb-unicode
+%global rubyabi 1.9.1
 
 Summary: Unicode support for hirb
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Name: rubygem-%{gem_name}
+Version: 0.0.5
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
+Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby 
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-hirb => 0.5
-Requires: rubygem-hirb < 1
-
-Requires: rubygem-unicode-display_width => 0.1.1
-Requires: rubygem-unicode-display_width < 0.2
+Requires: rubygem(hirb) => 0.5
+Requires: rubygem(hirb) < 1
+Requires: rubygem(unicode-display_width) => 0.1.1
+Requires: rubygem(unicode-display_width) < 0.2
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(hirb-unicode) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 Unicode support for hirb
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/hirb-unicode-0.0.5/.gitignore
-%{gemdir}/gems/hirb-unicode-0.0.5/Gemfile
-%{gemdir}/gems/hirb-unicode-0.0.5/MIT-LICENSE
-%{gemdir}/gems/hirb-unicode-0.0.5/README.md
-%{gemdir}/gems/hirb-unicode-0.0.5/Rakefile
-%{gemdir}/gems/hirb-unicode-0.0.5/hirb-unicode.gemspec
-%{gemdir}/gems/hirb-unicode-0.0.5/lib/hirb-unicode.rb
-%{gemdir}/gems/hirb-unicode-0.0.5/lib/hirb/unicode.rb
-%{gemdir}/gems/hirb-unicode-0.0.5/lib/hirb/unicode/string_util.rb
-%{gemdir}/gems/hirb-unicode-0.0.5/lib/hirb/unicode/version.rb
-%{gemdir}/gems/hirb-unicode-0.0.5/test/string_test.rb
-%{gemdir}/gems/hirb-unicode-0.0.5/test/test_helper.rb
-
-
-%doc %{gemdir}/doc/hirb-unicode-0.0.5
-%{gemdir}/cache/hirb-unicode-0.0.5.gem
-%{gemdir}/specifications/hirb-unicode-0.0.5.gemspec
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
+/usr/share/gems/gems/hirb-unicode-0.0.5/
+%files doc
+%doc %{gem_docdir}
 
 %changelog
+* Thu Jun 14 2012 jason - 0.0.5-1
+- Initial package

@@ -1,79 +1,68 @@
-%define rbname jquery-rails
-%define version 1.0.19
-%define release 1
+# Generated from jquery-rails-1.0.19.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name jquery-rails
+%global rubyabi 1.9.1
 
 Summary: Use jQuery with Rails 3
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gem_name}
+Version: 1.0.19
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://rubygems.org/gems/jquery-rails
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) >= 1.3.6
 Requires: ruby 
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-railties => 3.0
-Requires: rubygem-railties < 4
-
-Requires: rubygem-thor => 0.14
-Requires: rubygem-thor < 1
+Requires: rubygem(railties) => 3.0
+Requires: rubygem(railties) < 4
+Requires: rubygem(thor) => 0.14
+Requires: rubygem(thor) < 1
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel >= 1.3.6
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(jquery-rails) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 This gem provides jQuery and the jQuery-ujs driver for your Rails 3
 application.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/jquery-rails-1.0.19/.gitignore
-%{gemdir}/gems/jquery-rails-1.0.19/CHANGELOG.md
-%{gemdir}/gems/jquery-rails-1.0.19/Gemfile
-%{gemdir}/gems/jquery-rails-1.0.19/Gemfile.lock
-%{gemdir}/gems/jquery-rails-1.0.19/LICENSE
-%{gemdir}/gems/jquery-rails-1.0.19/README.md
-%{gemdir}/gems/jquery-rails-1.0.19/Rakefile
-%{gemdir}/gems/jquery-rails-1.0.19/jquery-rails.gemspec
-%{gemdir}/gems/jquery-rails-1.0.19/lib/generators/jquery/install/install_generator.rb
-%{gemdir}/gems/jquery-rails-1.0.19/lib/jquery-rails.rb
-%{gemdir}/gems/jquery-rails-1.0.19/lib/jquery/assert_select.rb
-%{gemdir}/gems/jquery-rails-1.0.19/lib/jquery/rails.rb
-%{gemdir}/gems/jquery-rails-1.0.19/lib/jquery/rails/engine.rb
-%{gemdir}/gems/jquery-rails-1.0.19/lib/jquery/rails/railtie.rb
-%{gemdir}/gems/jquery-rails-1.0.19/lib/jquery/rails/version.rb
-%{gemdir}/gems/jquery-rails-1.0.19/spec/lib/jquery-rails_spec.rb
-%{gemdir}/gems/jquery-rails-1.0.19/spec/spec_helper.rb
-%{gemdir}/gems/jquery-rails-1.0.19/vendor/assets/javascripts/jquery-ui.js
-%{gemdir}/gems/jquery-rails-1.0.19/vendor/assets/javascripts/jquery-ui.min.js
-%{gemdir}/gems/jquery-rails-1.0.19/vendor/assets/javascripts/jquery.js
-%{gemdir}/gems/jquery-rails-1.0.19/vendor/assets/javascripts/jquery.min.js
-%{gemdir}/gems/jquery-rails-1.0.19/vendor/assets/javascripts/jquery_ujs.js
-
-
-%doc %{gemdir}/doc/jquery-rails-1.0.19
-%{gemdir}/cache/jquery-rails-1.0.19.gem
-%{gemdir}/specifications/jquery-rails-1.0.19.gemspec
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
+/usr/share/gems/gems/jquery-rails-1.0.19/
+%files doc
+%doc %{gem_docdir}
 
 %changelog
+* Thu Jun 14 2012 jason - 1.0.19-1
+- Initial package

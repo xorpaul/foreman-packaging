@@ -1,26 +1,23 @@
-%define rbname wirb
-%define version 0.4.2
-%define release 1
+# Generated from wirb-0.4.2.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name wirb
+%global rubyabi 1.9.1
 
-Summary: Wavy IRB: Colorizes irb results.
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: Wavy IRB: Colorizes irb results
+Name: rubygem-%{gem_name}
+Version: 0.4.2
+Release: 1%{?dist}
+Group: Development/Languages
+License: MIT
 URL: https://github.com/janlelis/wirb
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) >= 1.3.6
 Requires: ruby >= 1.8.7
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel >= 1.3.6
 BuildRequires: ruby >= 1.8.7
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(wirb) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 Wavy IRB: Colorizes irb results. It originated from Wirble, but only provides
@@ -29,70 +26,43 @@ You can use it with your favorite colorizer engine. See README.rdoc for more
 details.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/version.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/wp.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/colorizer.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/colorizer/wirb0_paint.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/colorizer/wirble.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/colorizer/wirb0.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/colorizer/highline.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/colorizer/paint.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/colorizer/wirb0_highline.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/tokenizer.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb/irb.rb
-%{gemdir}/gems/wirb-0.4.2/lib/wirb.rb
-%{gemdir}/gems/wirb-0.4.2/spec/spec_helper.rb
-%{gemdir}/gems/wirb-0.4.2/spec/colorizer_highline_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_rails_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_enumerator_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_array_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_hash_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/colorizer_paint_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_misc_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/colorizer_wirb0_paint_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/colorizer_wirb0_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_object_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/colorizer_wirb0_highline_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_symbol_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/colorizer_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_string_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_rubyvm_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_rubygems_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_set_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_nested_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_number_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_regexp_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/colorizer_wirble_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_nil_false_true_spec.rb
-%{gemdir}/gems/wirb-0.4.2/spec/tokenizer_time_spec.rb
-%doc %{gemdir}/gems/wirb-0.4.2/COPYING.txt
-%{gemdir}/gems/wirb-0.4.2/CHANGELOG.rdoc
-%doc %{gemdir}/gems/wirb-0.4.2/README.rdoc
-%{gemdir}/gems/wirb-0.4.2/data/wirb/classic_paint.yml
-%{gemdir}/gems/wirb-0.4.2/data/wirb/colorless.yml
-%{gemdir}/gems/wirb-0.4.2/data/wirb/classic_wirb0.yml
-%{gemdir}/gems/wirb-0.4.2/Rakefile
-%{gemdir}/gems/wirb-0.4.2/wirb.gemspec
-%{gemdir}/gems/wirb-0.4.2/.gemtest
-
-
-%doc %{gemdir}/doc/wirb-0.4.2
-%{gemdir}/cache/wirb-0.4.2.gem
-%{gemdir}/specifications/wirb-0.4.2.gemspec
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
+/usr/share/gems/gems/wirb-0.4.2/
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/README.rdoc
+%doc %{gem_instdir}/COPYING.txt
 
 %changelog
+* Thu Jun 14 2012 jason - 0.4.2-1
+- Initial package

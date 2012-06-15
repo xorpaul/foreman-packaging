@@ -1,84 +1,71 @@
-%define rbname excon
-%define version 0.13.3
-%define release 1
+# Generated from excon-0.13.3.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name excon
+%global rubyabi 1.9.1
 
 Summary: speed, persistence, http(s)
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gem_name}
+Version: 0.13.3
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: https://github.com/geemus/excon
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby 
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(excon) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 EXtended http(s) CONnections
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/excon-0.13.3/Gemfile
-%doc %{gemdir}/gems/excon-0.13.3/README.md
-%{gemdir}/gems/excon-0.13.3/Rakefile
-%{gemdir}/gems/excon-0.13.3/benchmarks
-%{gemdir}/gems/excon-0.13.3/changelog.txt
-%{gemdir}/gems/excon-0.13.3/data/cacert.pem
-%{gemdir}/gems/excon-0.13.3/excon.gemspec
-%{gemdir}/gems/excon-0.13.3/lib/excon.rb
-%{gemdir}/gems/excon-0.13.3/lib/excon/connection.rb
-%{gemdir}/gems/excon-0.13.3/lib/excon/constants.rb
-%{gemdir}/gems/excon-0.13.3/lib/excon/errors.rb
-%{gemdir}/gems/excon-0.13.3/lib/excon/response.rb
-%{gemdir}/gems/excon-0.13.3/lib/excon/socket.rb
-%{gemdir}/gems/excon-0.13.3/lib/excon/ssl_socket.rb
-%{gemdir}/gems/excon-0.13.3/tests/bad_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/basic_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/header_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/idempotent_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/instrumentation_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/proxy_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/query_string_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/rackups/basic.rb
-%{gemdir}/gems/excon-0.13.3/tests/rackups/basic.ru
-%{gemdir}/gems/excon-0.13.3/tests/rackups/basic_auth.ru
-%{gemdir}/gems/excon-0.13.3/tests/rackups/proxy.ru
-%{gemdir}/gems/excon-0.13.3/tests/rackups/query_string.ru
-%{gemdir}/gems/excon-0.13.3/tests/rackups/request_methods.ru
-%{gemdir}/gems/excon-0.13.3/tests/rackups/response_header.ru
-%{gemdir}/gems/excon-0.13.3/tests/rackups/ssl.ru
-%{gemdir}/gems/excon-0.13.3/tests/rackups/thread_safety.ru
-%{gemdir}/gems/excon-0.13.3/tests/request_method_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/servers/bad.rb
-%{gemdir}/gems/excon-0.13.3/tests/stub_tests.rb
-%{gemdir}/gems/excon-0.13.3/tests/test_helper.rb
-%{gemdir}/gems/excon-0.13.3/tests/thread_safety_tests.rb
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
+   /usr/share/gems/gems/excon-0.13.3/Gemfile
+   /usr/share/gems/gems/excon-0.13.3/Rakefile
+   /usr/share/gems/gems/excon-0.13.3/benchmarks/
+   /usr/share/gems/gems/excon-0.13.3/changelog.txt
+   /usr/share/gems/gems/excon-0.13.3/data/cacert.pem
+   /usr/share/gems/gems/excon-0.13.3/excon.gemspec
+   /usr/share/gems/gems/excon-0.13.3/tests/
 
-%doc %{gemdir}/doc/excon-0.13.3
-%{gemdir}/cache/excon-0.13.3.gem
-%{gemdir}/specifications/excon-0.13.3.gemspec
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/README.md
 
 %changelog
+* Thu Jun 14 2012 jason - 0.13.3-1
+- Initial package

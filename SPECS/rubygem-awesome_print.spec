@@ -1,81 +1,77 @@
-%define rbname awesome_print
-%define version 1.0.2
-%define release 1
+# Generated from awesome_print-1.0.2.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name awesome_print
+%global rubyabi 1.9.1
 
 Summary: Pretty print Ruby objects with proper indentation and colors
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gem_name}
+Version: 1.0.2
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://github.com/michaeldv/awesome_print
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby 
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(awesome_print) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 Great Ruby dubugging companion: pretty print Ruby objects to visualize their
 structure. Supports custom object formatting via plugins
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/awesome_print-1.0.2/CHANGELOG
-%{gemdir}/gems/awesome_print-1.0.2/Gemfile
-%{gemdir}/gems/awesome_print-1.0.2/Gemfile.lock
-%{gemdir}/gems/awesome_print-1.0.2/LICENSE
-%{gemdir}/gems/awesome_print-1.0.2/Rakefile
-%{gemdir}/gems/awesome_print-1.0.2/README.md
-%{gemdir}/gems/awesome_print-1.0.2/lib/ap.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/core_ext/array.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/core_ext/class.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/core_ext/kernel.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/core_ext/logger.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/core_ext/method.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/core_ext/object.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/core_ext/string.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/ext/action_view.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/ext/active_record.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/ext/active_support.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/ext/mongo_mapper.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/ext/mongoid.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/ext/nokogiri.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/formatter.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/inspector.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print/version.rb
-%{gemdir}/gems/awesome_print-1.0.2/lib/awesome_print.rb
-%{gemdir}/gems/awesome_print-1.0.2/spec/colors_spec.rb
-%{gemdir}/gems/awesome_print-1.0.2/spec/formats_spec.rb
-%{gemdir}/gems/awesome_print-1.0.2/spec/methods_spec.rb
-%{gemdir}/gems/awesome_print-1.0.2/spec/objects_spec.rb
-%{gemdir}/gems/awesome_print-1.0.2/spec/spec_helper.rb
-%{gemdir}/gems/awesome_print-1.0.2/.gitignore
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
+/usr/share/gems/gems/awesome_print-1.0.2/.gitignore
+/usr/share/gems/gems/awesome_print-1.0.2/CHANGELOG
+/usr/share/gems/gems/awesome_print-1.0.2/Gemfile
+/usr/share/gems/gems/awesome_print-1.0.2/Gemfile.lock
+/usr/share/gems/gems/awesome_print-1.0.2/LICENSE
+/usr/share/gems/gems/awesome_print-1.0.2/README.md
+/usr/share/gems/gems/awesome_print-1.0.2/Rakefile
+/usr/share/gems/gems/awesome_print-1.0.2/spec/colors_spec.rb
+/usr/share/gems/gems/awesome_print-1.0.2/spec/formats_spec.rb
+/usr/share/gems/gems/awesome_print-1.0.2/spec/methods_spec.rb
+/usr/share/gems/gems/awesome_print-1.0.2/spec/objects_spec.rb
+/usr/share/gems/gems/awesome_print-1.0.2/spec/spec_helper.rb
 
 
-%doc %{gemdir}/doc/awesome_print-1.0.2
-%{gemdir}/cache/awesome_print-1.0.2.gem
-%{gemdir}/specifications/awesome_print-1.0.2.gemspec
+%files doc
+%doc %{gem_docdir}
 
 %changelog
+* Thu Jun 14 2012 jason - 1.0.2-1
+- Initial package

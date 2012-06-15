@@ -1,59 +1,66 @@
-%define rbname unicode-display_width
-%define version 0.1.1
-%define release 1
+# Generated from unicode-display_width-0.1.1.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name unicode-display_width
+%global rubyabi 1.9.1
 
-Summary: Support for east_asian_width string widths.
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: Support for east_asian_width string widths
+Name: rubygem-%{gem_name}
+Version: 0.1.1
+Release: 1%{?dist}
+Group: Development/Languages
+License: MIT
 URL: http://github.com/janlelis/unicode-display_width
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) >= 1.3.6
 Requires: ruby 
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel >= 1.3.6
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(unicode-display_width) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 This gem adds String#display_size to get the display size of a string using
 EastAsianWidth.txt.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/unicode-display_width-0.1.1/lib/unicode/display_size.rb
-%{gemdir}/gems/unicode-display_width-0.1.1/lib/unicode/display_width.rb
-%doc %{gemdir}/gems/unicode-display_width-0.1.1/LICENSE.txt
-%doc %{gemdir}/gems/unicode-display_width-0.1.1/README.rdoc
-%{gemdir}/gems/unicode-display_width-0.1.1/data/EastAsianWidth.txt
-%{gemdir}/gems/unicode-display_width-0.1.1/data/EastAsianWidth.index
-%{gemdir}/gems/unicode-display_width-0.1.1/Rakefile
-%{gemdir}/gems/unicode-display_width-0.1.1/.gemspec
-
-
-%doc %{gemdir}/doc/unicode-display_width-0.1.1
-%{gemdir}/cache/unicode-display_width-0.1.1.gem
-%{gemdir}/specifications/unicode-display_width-0.1.1.gemspec
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
+/usr/share/gems/gems/unicode-display_width-0.1.1/
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/README.rdoc
+%doc %{gem_instdir}/LICENSE.txt
 
 %changelog
+* Thu Jun 14 2012 jason - 0.1.1-1
+- Initial package

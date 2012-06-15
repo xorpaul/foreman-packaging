@@ -1,156 +1,82 @@
-%define rbname activerecord
-%define version 3.0.14
-%define release 1
+# Generated from activerecord-3.0.14.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name activerecord
+%global rubyabi 1.9.1
 
-Summary: Object-relational mapper framework (part of Rails).
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: Object-relational mapper framework (part of Rails)
+Name: rubygem-%{gem_name}
+Epoch: 1
+Version: 3.0.14
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://www.rubyonrails.org
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Patch0: 0001-fix-activerecord-mysql-adapter.patch
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.7
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-activesupport = 3.0.14
-
-Requires: rubygem-activemodel = 3.0.14
-
-Requires: rubygem-arel => 2.0.10
-Requires: rubygem-arel < 2.1
-
-Requires: rubygem-tzinfo => 0.3.23
-Requires: rubygem-tzinfo < 0.4
+Requires: rubygem(activesupport) = 3.0.14
+Requires: rubygem(activemodel) = 3.0.14
+Requires: rubygem(arel) => 2.0.10
+Requires: rubygem(arel) < 2.1
+Requires: rubygem(tzinfo) => 0.3.23
+Requires: rubygem(tzinfo) < 0.4
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby >= 1.8.7
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(activerecord) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
-
+Provides: rubygem(%{gem_name}) = %{version}
+Provides: %{name} = %{version}
 %description
 Databases on Rails. Build a persistent domain model by mapping database tables
 to Ruby classes. Strong conventions for associations, validations,
 aggregations, migrations, and testing come baked-in.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
+cd %{buildroot}%{gem_dir}/gems/activerecord-3.0.14/lib/active_record/
+cp %{PATCH0} ./
+patch -p0 < ./0001-fix-activerecord-mysql-adapter.patch
+rm ./0001-fix-activerecord-mysql-adapter.patch
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/activerecord-3.0.14/CHANGELOG
-%doc %{gemdir}/gems/activerecord-3.0.14/README.rdoc
-%{gemdir}/gems/activerecord-3.0.14/examples/associations.png
-%{gemdir}/gems/activerecord-3.0.14/examples/performance.rb
-%{gemdir}/gems/activerecord-3.0.14/examples/simple.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/aggregations.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/association_preload.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/association_collection.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/association_proxy.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/belongs_to_association.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/belongs_to_polymorphic_association.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/has_and_belongs_to_many_association.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/has_many_association.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/has_many_through_association.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/has_one_association.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/has_one_through_association.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations/through_association_scope.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/associations.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/attribute_methods/before_type_cast.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/attribute_methods/dirty.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/attribute_methods/primary_key.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/attribute_methods/query.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/attribute_methods/read.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/attribute_methods/time_zone_conversion.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/attribute_methods/write.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/attribute_methods.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/autosave_association.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/base.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/callbacks.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract/connection_pool.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract/connection_specification.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract/database_limits.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract/database_statements.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract/query_cache.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract/quoting.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract/schema_definitions.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract/schema_statements.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/abstract_adapter.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/mysql_adapter.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/postgresql_adapter.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/sqlite3_adapter.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/connection_adapters/sqlite_adapter.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/counter_cache.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/dynamic_finder_match.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/dynamic_scope_match.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/errors.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/fixtures.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/locale/en.yml
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/locking/optimistic.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/locking/pessimistic.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/log_subscriber.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/migration.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/named_scope.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/nested_attributes.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/observer.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/persistence.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/query_cache.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/railtie.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/railties/controller_runtime.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/railties/databases.rake
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/railties/jdbcmysql_error.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/reflection.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/relation/batches.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/relation/calculations.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/relation/finder_methods.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/relation/predicate_builder.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/relation/query_methods.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/relation/spawn_methods.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/relation.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/schema.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/schema_dumper.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/serialization.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/serializers/xml_serializer.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/session_store.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/test_case.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/timestamp.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/transactions.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/validations/associated.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/validations/uniqueness.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/validations.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record/version.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/active_record.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/migration/migration_generator.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/migration/templates/migration.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/migration.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/model/model_generator.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/model/templates/migration.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/model/templates/model.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/model/templates/module.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/observer/observer_generator.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/observer/templates/observer.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/session_migration/session_migration_generator.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record/session_migration/templates/migration.rb
-%{gemdir}/gems/activerecord-3.0.14/lib/rails/generators/active_record.rb
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
 
-
-%doc %{gemdir}/doc/activerecord-3.0.14
-%{gemdir}/cache/activerecord-3.0.14.gem
-%{gemdir}/specifications/activerecord-3.0.14.gemspec
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/README.rdoc
+%doc /usr/share/gems/gems/activerecord-3.0.14/CHANGELOG
+%doc /usr/share/gems/gems/activerecord-3.0.14/examples/associations.png
+%doc /usr/share/gems/gems/activerecord-3.0.14/examples/performance.rb
+%doc /usr/share/gems/gems/activerecord-3.0.14/examples/simple.rb
 
 %changelog
+* Thu Jun 14 2012 jason - 3.0.14-1
+- Initial package

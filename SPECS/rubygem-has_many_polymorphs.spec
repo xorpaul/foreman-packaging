@@ -1,66 +1,67 @@
-%define rbname has_many_polymorphs
-%define version 3.0.0.beta1
-%define release 2
+# Generated from has_many_polymorphs-3.0.0.beta1.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name has_many_polymorphs
+%global rubyabi 1.9.1
 
-Summary: An ActiveRecord plugin for self-referential and double-sided polymorphic associations.
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: An ActiveRecord plugin for self-referential and double-sided polymorphic associations
+Name: rubygem-%{gem_name}
+Version: 3.0.0.beta1
+Release: 2%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://blog.evanweaver.com/files/doc/fauna/has_many_polymorphs/
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) >= 1.3.6
 Requires: ruby 
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-activerecord 
+Requires: rubygem(activerecord) 
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel >= 1.3.6
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(has_many_polymorphs) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/support_methods.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/class_methods.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/autoload.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/railtie.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/association.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/rake_task_redefine_task.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/base.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/reflection.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs/debugging_tools.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/lib/has_many_polymorphs.rb
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/LICENSE
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/README
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/CHANGELOG
-%{gemdir}/gems/has_many_polymorphs-3.0.0.beta1/Gemfile
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
 
-
-%doc %{gemdir}/doc/has_many_polymorphs-3.0.0.beta1
-%{gemdir}/cache/has_many_polymorphs-3.0.0.beta1.gem
-%{gemdir}/specifications/has_many_polymorphs-3.0.0.beta1.gemspec
-
+%files doc
+%doc %{gem_docdir}
+%doc /usr/share/gems/gems/has_many_polymorphs-3.0.0.beta1/CHANGELOG
+%doc /usr/share/gems/gems/has_many_polymorphs-3.0.0.beta1/Gemfile
+%doc /usr/share/gems/gems/has_many_polymorphs-3.0.0.beta1/LICENSE
+%doc /usr/share/gems/gems/has_many_polymorphs-3.0.0.beta1/README
 %changelog
+* Thu Jun 14 2012 jason - 3.0.0.beta1-1
+- Initial package

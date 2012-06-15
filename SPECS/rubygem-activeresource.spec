@@ -1,73 +1,69 @@
-%define rbname activeresource
-%define version 3.0.14
-%define release 1
+# Generated from activeresource-3.0.14.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name activeresource
+%global rubyabi 1.9.1
 
-Summary: REST modeling framework (part of Rails).
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: REST modeling framework (part of Rails)
+Name: rubygem-%{gem_name}
+Epoch: 1
+Version: 3.0.14
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://www.rubyonrails.org
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.7
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-activesupport = 3.0.14
-
-Requires: rubygem-activemodel = 3.0.14
+Requires: rubygem(activesupport) = 3.0.14
+Requires: rubygem(activemodel) = 3.0.14
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby >= 1.8.7
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(activeresource) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
-
+Provides: rubygem(%{gem_name}) = %{version}
+Provides: %{name} = %{version}
 %description
 REST on Rails. Wrap your RESTful web app with Ruby classes and work with them
 like Active Record models.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/activeresource-3.0.14/CHANGELOG
-%doc %{gemdir}/gems/activeresource-3.0.14/README.rdoc
-%{gemdir}/gems/activeresource-3.0.14/examples/simple.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/base.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/connection.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/custom_methods.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/exceptions.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/formats/json_format.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/formats/xml_format.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/formats.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/http_mock.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/log_subscriber.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/observing.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/railtie.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/schema.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/validations.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource/version.rb
-%{gemdir}/gems/activeresource-3.0.14/lib/active_resource.rb
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
 
-
-%doc %{gemdir}/doc/activeresource-3.0.14
-%{gemdir}/cache/activeresource-3.0.14.gem
-%{gemdir}/specifications/activeresource-3.0.14.gemspec
-
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/README.rdoc
+%doc /usr/share/gems/gems/activeresource-3.0.14/CHANGELOG
+%doc /usr/share/gems/gems/activeresource-3.0.14/examples/simple.rb
 %changelog
+* Thu Jun 14 2012 jason - 3.0.14-1
+- Initial package

@@ -1,72 +1,66 @@
-%define rbname multi_json
-%define version 1.2.0
-%define release 1
+# Generated from multi_json-1.2.0.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name multi_json
+%global rubyabi 1.9.1
 
-Summary: A gem to provide swappable JSON backends.
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: A gem to provide swappable JSON backends
+Name: rubygem-%{gem_name}
+Version: 1.2.0
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://github.com/intridea/multi_json
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) >= 1.3.6
 Requires: ruby 
-Requires: rubygems >= 1.8.10
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel >= 1.3.6
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(multi_json) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 A gem to provide easy switching between different JSON backends, including Oj,
 Yajl, the JSON gem (with C-extensions), the pure-Ruby JSON gem, and OkJson.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%doc %{gemdir}/gems/multi_json-1.2.0/LICENSE.md
-%doc %{gemdir}/gems/multi_json-1.2.0/README.md
-%{gemdir}/gems/multi_json-1.2.0/Rakefile
-%{gemdir}/gems/multi_json-1.2.0/multi_json.gemspec
-%{gemdir}/gems/multi_json-1.2.0/Gemfile
-%{gemdir}/gems/multi_json-1.2.0/.document
-%{gemdir}/gems/multi_json-1.2.0/.rspec
-%{gemdir}/gems/multi_json-1.2.0/.travis.yml
-%{gemdir}/gems/multi_json-1.2.0/spec/engine_shared_example.rb
-%{gemdir}/gems/multi_json-1.2.0/spec/helper.rb
-%{gemdir}/gems/multi_json-1.2.0/spec/multi_json_spec.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/engines/json_common.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/engines/json_gem.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/engines/json_pure.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/engines/nsjsonserialization.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/engines/oj.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/engines/ok_json.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/engines/yajl.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/vendor/ok_json.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json/version.rb
-%{gemdir}/gems/multi_json-1.2.0/lib/multi_json.rb
-
-
-%doc %{gemdir}/doc/multi_json-1.2.0
-%{gemdir}/cache/multi_json-1.2.0.gem
-%{gemdir}/specifications/multi_json-1.2.0.gemspec
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
+/usr/share/gems/gems/multi_json-1.2.0/
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/LICENSE.md
+%doc %{gem_instdir}/README.md
 
 %changelog
+* Thu Jun 14 2012 jason - 1.2.0-1
+- Initial package

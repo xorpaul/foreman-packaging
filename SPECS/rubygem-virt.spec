@@ -1,89 +1,66 @@
-%define rbname virt
-%define version 0.2.1
-%define release 1
+# Generated from virt-0.2.1.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name virt
+%global rubyabi 1.9.1
 
 Summary: Simple to use ruby interface to libvirt
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Name: rubygem-%{gem_name}
+Version: 0.2.1
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv3
 URL: https://github.com/ohadlevy/virt
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) 
 Requires: ruby 
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-ruby-libvirt 
+Requires: rubygem(ruby-libvirt) 
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel 
 BuildRequires: ruby 
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(virt) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
+Provides: rubygem(%{gem_name}) = %{version}
 
 %description
 Simplied interface to use ruby the libvirt ruby library
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+
+
 
 %files
-%defattr(-, root, root)
-%{gemdir}/gems/virt-0.2.1/.document
-%{gemdir}/gems/virt-0.2.1/Gemfile
-%{gemdir}/gems/virt-0.2.1/Gemfile.lock
-%doc %{gemdir}/gems/virt-0.2.1/LICENSE.txt
-%doc %{gemdir}/gems/virt-0.2.1/README.rdoc
-%{gemdir}/gems/virt-0.2.1/Rakefile
-%{gemdir}/gems/virt-0.2.1/VERSION
-%{gemdir}/gems/virt-0.2.1/lib/virt.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/connection.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/guest.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/host.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/interface.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/kvm.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/kvm/guest.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/kvm/host.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/kvm/interface.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/kvm/volume.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/pool.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/util.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/vmware.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/vmware/guest.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/vmware/host.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/vmware/interface.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/vmware/volume.rb
-%{gemdir}/gems/virt-0.2.1/lib/virt/volume.rb
-%{gemdir}/gems/virt-0.2.1/templates/kvm/guest.xml.erb
-%{gemdir}/gems/virt-0.2.1/templates/kvm/volume.xml.erb
-%{gemdir}/gems/virt-0.2.1/templates/vmware/guest.xml.erb
-%{gemdir}/gems/virt-0.2.1/templates/vmware/volume.xml.erb
-%{gemdir}/gems/virt-0.2.1/test/connection_test.rb
-%{gemdir}/gems/virt-0.2.1/test/guest_test.rb
-%{gemdir}/gems/virt-0.2.1/test/host_test.rb
-%{gemdir}/gems/virt-0.2.1/test/interface_test.rb
-%{gemdir}/gems/virt-0.2.1/test/pool_test.rb
-%{gemdir}/gems/virt-0.2.1/test/test_helper.rb
-%{gemdir}/gems/virt-0.2.1/test/volume_test.rb
-%{gemdir}/gems/virt-0.2.1/virt.gemspec
-
-
-%doc %{gemdir}/doc/virt-0.2.1
-%{gemdir}/cache/virt-0.2.1.gem
-%{gemdir}/specifications/virt-0.2.1.gemspec
+%dir %{gem_instdir}
+%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
+/usr/share/gems/gems/virt-0.2.1/
+%files doc
+%doc %{gem_docdir}
+%doc %{gem_instdir}/LICENSE.txt
+%doc %{gem_instdir}/README.rdoc
 
 %changelog
+* Thu Jun 14 2012 jason - 0.2.1-1
+- Initial package

@@ -1,72 +1,81 @@
-%define rbname rails
-%define version 3.0.14
-%define release 1
+# Generated from rails-3.0.14.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name rails
+%global rubyabi 1.9.1
 
-Summary: Full-stack web application framework.
-Name: rubygem-%{rbname}
-
-Version: %{version}
-Release: %{release}%{dist}
-Group: Development/Ruby
-License: Distributable
+Summary: Full-stack web application framework
+Name: rubygem-%{gem_name}
+Epoch: 1
+Version: 3.0.14
+Release: 1%{?dist}
+Group: Development/Languages
+License: GPLv2+ or Ruby
 URL: http://www.rubyonrails.org
-Source0: %{rbname}-%{version}.gem
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Source0: %{gem_name}-%{version}.gem
+Requires: ruby(abi) = %{rubyabi}
+Requires: ruby(rubygems) >= 1.3.6
 Requires: ruby >= 1.8.7
-Requires: rubygems >= 1.8.10
-
-Requires: rubygem-activesupport = 3.0.14
-
-Requires: rubygem-actionpack = 3.0.14
-
-Requires: rubygem-activerecord = 3.0.14
-
-Requires: rubygem-activeresource = 3.0.14
-
-Requires: rubygem-actionmailer = 3.0.14
-
-Requires: rubygem-railties = 3.0.14
-
-Requires: rubygem-bundler => 1.0
-Requires: rubygem-bundler < 2
+Requires: rubygem(activesupport) = 3.0.14
+Requires: rubygem(actionpack) = 3.0.14
+Requires: rubygem(activerecord) = 3.0.14
+Requires: rubygem(activeresource) = 3.0.14
+Requires: rubygem(actionmailer) = 3.0.14
+Requires: rubygem(railties) = 3.0.14
+Requires: rubygem(bundler) => 1.0
+Requires: rubygem(bundler) < 2
+BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: rubygems-devel >= 1.3.6
 BuildRequires: ruby >= 1.8.7
-BuildRequires: rubygems >= 1.8.10
 BuildArch: noarch
-Provides: rubygem(rails) = %{version}
-
-%define gemdir /usr/lib/ruby/gems/1.8
-%define gembuilddir %{buildroot}%{gemdir}
-
+Provides: rubygem(%{gem_name}) = %{version}
+Provides: %{name} = %{version}
 %description
 Ruby on Rails is a full-stack web framework optimized for programmer happiness
 and sustainable productivity. It encourages beautiful code by favoring
 convention over configuration.
 
 
+%package doc
+Summary: Documentation for %{name}
+Group: Documentation
+Requires: %{name} = %{version}-%{release}
+BuildArch: noarch
+
+%description doc
+Documentation for %{name}
+
 %prep
-%setup -T -c
+%setup -q -c -T
+mkdir -p .%{gem_dir}
+gem install --local --install-dir .%{gem_dir} \
+            --bindir .%{_bindir} \
+            --force %{SOURCE0}
 
 %build
 
 %install
-%{__rm} -rf %{buildroot}
-mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
-mkdir -p %{buildroot}/%{_bindir}
-mv %{gembuilddir}/bin/* %{buildroot}/%{_bindir}
-rmdir %{gembuilddir}/bin
+mkdir -p %{buildroot}%{gem_dir}
+cp -a .%{gem_dir}/* \
+        %{buildroot}%{gem_dir}/
 
-%clean
-%{__rm} -rf %{buildroot}
+
+mkdir -p %{buildroot}%{_bindir}
+cp -a .%{_bindir}/* \
+        %{buildroot}%{_bindir}/
+
+find %{buildroot}%{gem_instdir}/bin -type f | xargs chmod a+x
+
 
 %files
-%defattr(-, root, root)
+%dir %{gem_instdir}
 %{_bindir}/rails
-%{gemdir}/gems/rails-3.0.14/bin/rails
+%{gem_instdir}/bin
+#%{gem_libdir}
+%exclude %{gem_cache}
+%{gem_spec}
 
-
-%doc %{gemdir}/doc/rails-3.0.14
-%{gemdir}/cache/rails-3.0.14.gem
-%{gemdir}/specifications/rails-3.0.14.gemspec
+%files doc
+%doc %{gem_docdir}
 
 %changelog
+* Thu Jun 14 2012 jason - 3.0.14-1
+- Initial package
