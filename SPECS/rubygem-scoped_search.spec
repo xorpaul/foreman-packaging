@@ -4,7 +4,7 @@
 
 Summary: Easily search you ActiveRecord models with a simple query language using a named scope
 Name: rubygem-%{gem_name}
-Version: 2.3.6
+Version: 2.3.7
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
@@ -68,7 +68,7 @@ cp -a .%{gem_dir}/* \
 %{gem_libdir}
 %exclude %{gem_cache}
 %{gem_spec}
-/usr/share/gems/gems/scoped_search-2.3.6/
+/usr/share/gems/gems/scoped_search-2.3.7/
 %files doc
 %doc %{gem_docdir}
 %doc %{gem_instdir}/README.rdoc
