@@ -4,7 +4,7 @@
 
 Summary: A Ruby client for oVirt REST API
 Name: rubygem-%{gem_name}
-Version: 0.0.11
+Version: 0.0.12
 Release: 1%{?dist}
 Group: Development/Languages
 License: MIT
@@ -56,7 +56,7 @@ cp -a .%{gem_dir}/* \
 %{gem_libdir}
 %exclude %{gem_cache}
 %{gem_spec}
-/usr/share/gems/gems/rbovirt-0.0.11/
+/usr/share/gems/gems/rbovirt-0.0.12/
 %files doc
 %doc %{gem_docdir}
 %doc %{gem_instdir}/LICENSE.txt
