@@ -1,29 +1,29 @@
-# Generated from activesupport-3.0.15.gem by gem2rpm -*- rpm-spec -*-
-%global gem_name activesupport
+# Generated from audited-activerecord-3.0.0.rc1.gem by gem2rpm -*- rpm-spec -*-
+%global gem_name audited-activerecord
 %global rubyabi 1.9.1
 
-Summary: A toolkit of support libraries and Ruby core extensions extracted from the Rails framework
+Summary: Log all changes to your ActiveRecord models
 Name: rubygem-%{gem_name}
-Epoch: 1
-Version: 3.0.15
+Version: 3.0.0.rc1
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
-URL: http://www.rubyonrails.org
+URL: https://github.com/collectiveidea/audited
 Source0: %{gem_name}-%{version}.gem
 Requires: ruby(abi) = %{rubyabi}
-Requires: ruby(rubygems) 
-Requires: ruby >= 1.8.7
+Requires: ruby(rubygems) > 1.3.1
+Requires: ruby 
+Requires: rubygem(audited) = 3.0.0.rc1
+Requires: rubygem(activerecord) => 3.0
+Requires: rubygem(activerecord) < 4
 BuildRequires: ruby(abi) = %{rubyabi}
-BuildRequires: rubygems-devel 
-BuildRequires: ruby >= 1.8.7
+BuildRequires: rubygems-devel > 1.3.1
+BuildRequires: ruby 
 BuildArch: noarch
 Provides: rubygem(%{gem_name}) = %{version}
-Provides: %{name} = %{version}
+
 %description
-A toolkit of support libraries and Ruby core extensions extracted from the
-Rails framework. Rich support for multibyte strings, internationalization,
-time zones, and testing.
+Log all changes to your ActiveRecord models
 
 
 %package doc
@@ -60,8 +60,7 @@ cp -a .%{gem_dir}/* \
 
 %files doc
 %doc %{gem_docdir}
-%doc /usr/share/gems/gems/activesupport-3.0.15/CHANGELOG
-%doc /usr/share/gems/gems/activesupport-3.0.15/README.rdoc
+
 %changelog
-* Thu Jun 14 2012 jason - 3.0.15-1
+* Thu Jun 21 2012 jason - 3.0.0.rc1-1
 - Initial package

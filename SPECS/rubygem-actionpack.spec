@@ -1,11 +1,11 @@
-# Generated from actionpack-3.0.14.gem by gem2rpm -*- rpm-spec -*-
+# Generated from actionpack-3.0.15.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name actionpack
 %global rubyabi 1.9.1
 
 Summary: Web-flow and rendering framework putting the VC in MVC (part of Rails)
 Name: rubygem-%{gem_name}
 Epoch: 1
-Version: 3.0.14
+Version: 3.0.15
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
@@ -15,8 +15,8 @@ Patch0: 0001-fix-actionpack-dependencies.patch
 Requires: ruby(abi) = %{rubyabi}
 Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.7
-Requires: rubygem(activesupport) = 3.0.14
-Requires: rubygem(activemodel) = 3.0.14
+Requires: rubygem(activesupport) = 3.0.15
+Requires: rubygem(activemodel) = 3.0.15
 Requires: rubygem(builder) => 2.1.2
 Requires: rubygem(builder) < 2.2
 Requires: rubygem(i18n) => 0.5.0
@@ -76,10 +76,10 @@ rm ./0001-fix-actionpack-dependencies.patch
 
 %files doc
 %doc %{gem_docdir}
-%doc /usr/share/gems/gems/actionpack-3.0.14/CHANGELOG
-%doc /usr/share/gems/gems/actionpack-3.0.14/MIT-LICENSE
-%doc /usr/share/gems/gems/actionpack-3.0.14/README.rdoc
+%doc /usr/share/gems/gems/actionpack-3.0.15/CHANGELOG
+%doc /usr/share/gems/gems/actionpack-3.0.15/MIT-LICENSE
+%doc /usr/share/gems/gems/actionpack-3.0.15/README.rdoc
 
 %changelog
-* Thu Jun 14 2012 jason - 3.0.14-1
+* Thu Jun 14 2012 jason - 3.0.15-1
 - Initial package

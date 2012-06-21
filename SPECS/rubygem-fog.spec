@@ -5,7 +5,7 @@
 Summary: brings clouds to you
 Name: rubygem-%{gem_name}
 Version: 1.3.1
-Release: 3%{?dist}
+Release: 4%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
 URL: http://github.com/fog/fog
@@ -14,8 +14,7 @@ Requires: ruby(abi) = %{rubyabi}
 Requires: ruby(rubygems) 
 Requires: ruby 
 Requires: rubygem(builder) 
-Requires: rubygem(excon) => 0.13.0
-Requires: rubygem(excon) < 0.14
+Requires: rubygem(excon) >= 0.14.0
 Requires: rubygem(formatador) => 0.2.0
 Requires: rubygem(formatador) < 0.3
 Requires: rubygem(multi_json) => 1.0

@@ -5,7 +5,7 @@
 Summary: An ActiveRecord plugin for self-referential and double-sided polymorphic associations
 Name: rubygem-%{gem_name}
 Version: 3.0.0.beta1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
 URL: http://blog.evanweaver.com/files/doc/fauna/has_many_polymorphs/

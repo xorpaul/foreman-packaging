@@ -1,22 +1,21 @@
-# Generated from activerecord-3.0.14.gem by gem2rpm -*- rpm-spec -*-
+# Generated from activerecord-3.0.15.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name activerecord
 %global rubyabi 1.9.1
 
 Summary: Object-relational mapper framework (part of Rails)
 Name: rubygem-%{gem_name}
 Epoch: 1
-Version: 3.0.14
+Version: 3.0.15
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
 URL: http://www.rubyonrails.org
 Source0: %{gem_name}-%{version}.gem
-Patch0: 0001-fix-activerecord-mysql-adapter.patch
 Requires: ruby(abi) = %{rubyabi}
 Requires: ruby(rubygems) 
 Requires: ruby >= 1.8.7
-Requires: rubygem(activesupport) = 3.0.14
-Requires: rubygem(activemodel) = 3.0.14
+Requires: rubygem(activesupport) = 3.0.15
+Requires: rubygem(activemodel) = 3.0.15
 Requires: rubygem(arel) => 2.0.10
 Requires: rubygem(arel) < 2.1
 Requires: rubygem(tzinfo) => 0.3.23
@@ -54,14 +53,6 @@ gem install --local --install-dir .%{gem_dir} \
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
-cd %{buildroot}%{gem_dir}/gems/activerecord-3.0.14/lib/active_record/
-cp %{PATCH0} ./
-patch -p0 < ./0001-fix-activerecord-mysql-adapter.patch
-rm ./0001-fix-activerecord-mysql-adapter.patch
-
-
-
-
 
 %files
 %dir %{gem_instdir}
@@ -72,11 +63,11 @@ rm ./0001-fix-activerecord-mysql-adapter.patch
 %files doc
 %doc %{gem_docdir}
 %doc %{gem_instdir}/README.rdoc
-%doc /usr/share/gems/gems/activerecord-3.0.14/CHANGELOG
-%doc /usr/share/gems/gems/activerecord-3.0.14/examples/associations.png
-%doc /usr/share/gems/gems/activerecord-3.0.14/examples/performance.rb
-%doc /usr/share/gems/gems/activerecord-3.0.14/examples/simple.rb
+%doc /usr/share/gems/gems/activerecord-3.0.15/CHANGELOG
+%doc /usr/share/gems/gems/activerecord-3.0.15/examples/associations.png
+%doc /usr/share/gems/gems/activerecord-3.0.15/examples/performance.rb
+%doc /usr/share/gems/gems/activerecord-3.0.15/examples/simple.rb
 
 %changelog
-* Thu Jun 14 2012 jason - 3.0.14-1
+* Thu Jun 14 2012 jason - 3.0.15-1
 - Initial package
