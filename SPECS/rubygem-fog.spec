@@ -1,11 +1,11 @@
-# Generated from fog-1.3.1.gem by gem2rpm -*- rpm-spec -*-
+# Generated from fog-%{version}.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name fog
 %global rubyabi 1.9.1
 
 Summary: brings clouds to you
 Name: rubygem-%{gem_name}
-Version: 1.3.1
-Release: 4%{?dist}
+Version: 1.4.0
+Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
 URL: http://github.com/fog/fog
@@ -76,24 +76,24 @@ find %{buildroot}%{gem_instdir}/bin -type f | xargs chmod a+x
 %{gem_libdir}
 %exclude %{gem_cache}
 %{gem_spec}
-/usr/share/gems/gems/fog-1.3.1/.document
-/usr/share/gems/gems/fog-1.3.1/.gitignore
-/usr/share/gems/gems/fog-1.3.1/.irbrc
-/usr/share/gems/gems/fog-1.3.1/Gemfile
-/usr/share/gems/gems/fog-1.3.1/Rakefile
-/usr/share/gems/gems/fog-1.3.1/benchs/fog_vs.rb
-/usr/share/gems/gems/fog-1.3.1/benchs/params.rb
-/usr/share/gems/gems/fog-1.3.1/benchs/parse_vs_push.rb
-/usr/share/gems/gems/fog-1.3.1/changelog.txt
-/usr/share/gems/gems/fog-1.3.1/docs/
-/usr/share/gems/gems/fog-1.3.1/fog.gemspec
-/usr/share/gems/gems/fog-1.3.1/spec/
-/usr/share/gems/gems/fog-1.3.1/tests/
+/usr/share/gems/gems/fog-%{version}/.document
+/usr/share/gems/gems/fog-%{version}/.gitignore
+/usr/share/gems/gems/fog-%{version}/.irbrc
+/usr/share/gems/gems/fog-%{version}/Gemfile
+/usr/share/gems/gems/fog-%{version}/Rakefile
+/usr/share/gems/gems/fog-%{version}/benchs/fog_vs.rb
+/usr/share/gems/gems/fog-%{version}/benchs/params.rb
+/usr/share/gems/gems/fog-%{version}/benchs/parse_vs_push.rb
+/usr/share/gems/gems/fog-%{version}/changelog.txt
+/usr/share/gems/gems/fog-%{version}/docs/
+/usr/share/gems/gems/fog-%{version}/fog.gemspec
+/usr/share/gems/gems/fog-%{version}/spec/
+/usr/share/gems/gems/fog-%{version}/tests/
 
 %files doc
 %doc %{gem_docdir}
 %doc %{gem_instdir}/README.rdoc
 
 %changelog
-* Thu Jun 14 2012 jason - 1.3.1-1
-- Initial package
+* Fri Jun 29 2012 jason - 1.4.0-1
+- Upgrade to version 1.4.0

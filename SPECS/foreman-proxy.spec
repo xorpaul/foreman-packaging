@@ -4,14 +4,13 @@
 
 Name:           foreman-proxy
 Version:        1.0.0
-Release:        0.1%{dist}
+Release:        0.2%{dist}
 Summary:        Restful Proxy for DNS, DHCP, TFTP, PuppetCA and Puppet
 
 Group:          Applications/System
 License:        GPLv3+
 URL:            http://theforeman.org/projects/smart-proxy
 Source0:        http://theforeman.org/files/todo/%{name}-%{version}.tar.bz2
-Patch1:		0001-Renamed-global-variable-PLATFORM-to-RUBY_PLATFORM.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -36,7 +35,7 @@ Mainly used by the foreman project (http://theforeman.org)
 
 %prep
 %setup -q -n %{name}
-%patch1 -p1
+
 %build
 
 %install
@@ -73,7 +72,6 @@ ln -sv %{_localstatedir}/log/%{name} %{buildroot}%{_datadir}/%{name}/logs
 
 # Link temp directory to system wide temp
 ln -sv %{_tmppath} %{buildroot}%{_datadir}/%{name}/tmp
-
 
 %clean
 rm -rf %{buildroot}
@@ -115,6 +113,8 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Fri Jun 29 2012 jmontleo@redhat.com 1.0.0-0.2
+- Rebuild with develop branch from today. Hopefully we're really 1.0.0 RC2 this time
 * Tue Jun 19 2012 jmontleo@redhat.com 0.5.1-9
 - Rebuild with todays develop branch.
 * Thu Jun 14 2012 jmontleo@redhat.com 0.5.1-8
