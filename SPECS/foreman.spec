@@ -152,7 +152,7 @@ Summary: Foreman vmware support
 Group:  Applications/System
 Requires: rubygem(rbvmomi)
 Requires: %{name}-%{version}-%{release}
-Requires: foreman-fog-%{version}-%{release}
+Requires: foreman-ec2-%{version}-%{release}
 
 %description vmware
 Meta Package to install requirements for vmware support
