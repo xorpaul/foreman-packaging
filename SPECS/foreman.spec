@@ -3,14 +3,14 @@
 
 Name:   foreman
 Version:1.0.0
-Release:0.2%{dist}
+Release:0.4%{dist}
 Summary:Systems Management web application
 
 Group:  Applications/System
 License:GPLv3+
-URL:http://theforeman.org
-Source0:http://github.com/ohadlevy/%{name}/tarball/%{name}-%{version}.tar.bz2
-
+URL: http://theforeman.org
+Source0: http://github.com/ohadlevy/%{name}/tarball/%{name}-%{version}.tar.bz2
+Source1: foreman.repo
 Patch1: 0001-foreman-initfix.patch
 Patch2: 0002-foreman-remove-git-refs-from-gemfiles.patch
 Patch3: 0003-foreman-mv-settings-into-place.patch
@@ -47,12 +47,36 @@ Requires: rubygem(audited-activerecord) >= 3.0.0
 Provides: %{name}-%{version}-%{release}
 #Packager:   Ohad Levy <ohadlevy@gmail.com>
 
+%package cli
+Summary: Foreman CLI
+Group: Applications/System
+Requires: %{name}-%{version}-%{release}
+Requires: rubygem(foremancli) >= 1.0
+
+%description cli
+Meta Package to install rubygem-cli and its dependencies
+
+%files cli
+
+%package release
+Summary:        Foreman repository files
+Group:  	Applications/System
+
+
+%description release
+Foreman repository contains open source and other distributable software for
+Fedora. This package contains the repository configuration for Yum.
+
+%files release
+%defattr(-,root,root,-)
+%config(noreplace) %{_sysconfdir}/yum.repos.d/*
+
 %package libvirt
 Summary: Foreman libvirt support
 Group:  Applications/System
 Requires: rubygem(virt) >= 0.2.1
 Requires: %{name}-%{version}-%{release}
-Requires: foreman-fog-%{version}-%{release}
+Requires: foreman-ec2-%{version}-%{release}
 Obsoletes: foreman-virt
 
 %description libvirt
@@ -80,8 +104,8 @@ fi
 Summary: Foreman ovirt support
 Group:  Applications/System
 Requires: rubygem(rbovirt) >= 0.0.12
+Requires: foreman-ec2-%{version}-%{release}
 Requires: %{name}-%{version}-%{release}
-Requires: foreman-fog-%{version}-%{release}
 
 %description ovirt
 Meta Package to install requirements for ovirt support
@@ -99,25 +123,26 @@ if [ $1 == 0 ]; then
 cd /usr/share/foreman; rm -f Gemfile.lock; /usr/bin/bundle install --local 1>/dev/null 2>&1
 fi
 
-%package fog
-Summary: Foreman fog support
+%package ec2
+Summary: Foreman ec2 support
 Group:  Applications/System
 Requires: rubygem-fog >= 1.4.0
 Requires: %{name}-%{version}-%{release}
-Provides: foreman-fog-%{version}-%{release}
+Provides: foreman-ec2-%{version}-%{release}
+Obsoletes: foreman-fog
 
-%description fog
-Meta Package to install requirements for fog support
+%description ec2
+Meta Package to install requirements for ec2 support
 
-%files fog
+%files ec2
 %{_datadir}/%{name}/bundler.d/fog.rb
 
-%post fog
+%post ec2
 if [ $1 == 1 ]; then
 cd /usr/share/foreman; rm -f Gemfile.lock; /usr/bin/bundle install --local 1>/dev/null 2>&1
 fi
 
-%postun fog
+%postun ec2
 if [ $1 == 0 ]; then
 cd /usr/share/foreman; rm -f Gemfile.lock; /usr/bin/bundle install --local 1>/dev/null 2>&1
 fi
@@ -329,6 +354,11 @@ install -d -m0750 %{buildroot}%{_localstatedir}/log/%{name}
 install -Dp -m0644 %{confdir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{_initrddir}/%{name}
 install -Dp -m0644 %{confdir}/logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+
+install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d
+install -pm 644 %{SOURCE1} \
+    $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d
+
 cp -p -r app bundler.d config config.ru extras Gemfile lib Rakefile script %{buildroot}%{_datadir}/%{name}
 #chmod a+x %{buildroot}%{_datadir}/%{name}/script/{console,dbconsole,runner}
 rm -rf %{buildroot}%{_datadir}/%{name}/extras/{jumpstart,spec}
@@ -359,15 +389,7 @@ ln -sv %{_localstatedir}/log/%{name} %{buildroot}%{_datadir}/%{name}/log
 
 # Put tmp files in %{_localstatedir}/run/%{name}
 ln -sv %{_localstatedir}/run/%{name} %{buildroot}%{_datadir}/%{name}/tmp
-
-# Create a script for migrating the database
-cat << \EOF > %{buildroot}%{_datadir}/%{name}/extras/dbmigrate
-#!/bin/sh
-cd .. && /usr/bin/rake db:migrate RAILS_ENV=production
-EOF
-chmod a+x %{buildroot}%{_datadir}/%{name}/extras/dbmigrate
 echo %{version} > %{buildroot}%{_datadir}/%{name}/VERSION
-
 %clean
 rm -rf %{buildroot}
 
@@ -450,6 +472,10 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Sun Jul 01 2012 jmontleo@redhat.com 1.0.0-0.4
+- Pull todays develop branch to fix dbmigrate issue, add mistakenly deleted version string back, and replace foreman-fog with foreman-ec2 as it indicates more clearly what functionality the package provides. 
+* Fri Jun 29 2012 jmontleo@redhat.com 1.0.0-0.3
+- More fixes for dbmigrate, foreman-cli and foreman-release added
 * Fri Jun 29 2012 jmontleo@redhat.com 1.0.0-0.2
 - Rebuild with develop branch from today for 1.0.0 RC2. Try to fix inconsistent db:migrate runs on upgrades.
 * Tue Jun 19 2012 jmontleo@redhat.com 0-5.1-20
