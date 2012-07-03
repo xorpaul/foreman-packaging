@@ -1,10 +1,10 @@
-# Generated from mysql2-0.3.11.gem by gem2rpm -*- rpm-spec -*-
+# Generated from mysql2-0.2.18.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name mysql2
 %global rubyabi 1.9.1
 
 Summary: A simple, fast Mysql library for Ruby, binding to libmysql
 Name: rubygem-%{gem_name}
-Version: 0.3.11
+Version: 0.2.18 
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
@@ -14,8 +14,10 @@ Requires: ruby(abi) = %{rubyabi}
 Requires: ruby(rubygems) 
 Requires: ruby 
 BuildRequires: ruby(abi) = %{rubyabi}
+BuildRequires: ruby-devel
+BuildRequires: mysql-devel
 BuildRequires: rubygems-devel 
-BuildRequires: ruby 
+BuildRequires: ruby
 Provides: rubygem(%{gem_name}) = %{version}
 
 %description
@@ -61,10 +63,10 @@ rm -rf %{buildroot}%{geminstdir}/ext
 %{gem_extdir}
 %exclude %{gem_cache}
 %{gem_spec}
-/usr/share/gems/gems/mysql2-0.3.11/
+/usr/share/gems/gems/mysql2-0.2.18/
 %files doc
 %doc %{gem_docdir}
 
 %changelog
-* Thu Jun 14 2012 jason - 0.3.11-1
+* Mon Jul 02 2012 jason - 0.2.18-1
 - Initial package
