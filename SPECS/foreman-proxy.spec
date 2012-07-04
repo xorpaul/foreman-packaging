@@ -113,6 +113,8 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Wed Jul 04 2012 jmontleo@redhat.com 1.0.0-0.5
+- Bump version number for foreman RC3 and build with todays develop branch
 * Sun Jul 01 2012 jmontleo@redhat.com 1.0.0-0.4
 - Pull todays develop branch
 * Fri Jun 29 2012 jmontleo@redhat.com 1.0.0-0.2
