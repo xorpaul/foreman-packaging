@@ -4,7 +4,7 @@
 
 Name:           foreman-proxy
 Version:        1.0.0
-Release:        0.4%{dist}
+Release:        0.5%{dist}
 Summary:        Restful Proxy for DNS, DHCP, TFTP, PuppetCA and Puppet
 
 Group:          Applications/System
