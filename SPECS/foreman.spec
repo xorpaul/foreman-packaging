@@ -3,7 +3,7 @@
 
 Name:   foreman
 Version:1.0.0
-Release:0.4%{dist}
+Release:0.5%{dist}
 Summary:Systems Management web application
 
 Group:  Applications/System
@@ -472,6 +472,8 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Wed Jul 04 2012 jmontleo@redhat.com 1.0.0-0.5
+- Bump version number and rebuild for RC3
 * Sun Jul 01 2012 jmontleo@redhat.com 1.0.0-0.4
 - Pull todays develop branch to fix dbmigrate issue, add mistakenly deleted version string back, and replace foreman-fog with foreman-ec2 as it indicates more clearly what functionality the package provides. 
 * Fri Jun 29 2012 jmontleo@redhat.com 1.0.0-0.3
