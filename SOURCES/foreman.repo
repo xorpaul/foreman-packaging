@@ -1,6 +1,6 @@
 [foreman]
 name=foreman
-baseurl=http://yum.theforeman.org/development/f16/x86_64
+baseurl=http://yum.theforeman.org/development/f16/$basearch
 gpgcheck=0
 enabled=1
 
