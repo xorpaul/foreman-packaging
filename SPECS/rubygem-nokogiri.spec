@@ -19,6 +19,8 @@ Requires: ruby >= 1.8.7
 BuildRequires: ruby(abi) = %{rubyabi}
 BuildRequires: ruby(rubygems) 
 BuildRequires: ruby >= 1.8.7
+BuildRequires: libxslt-devel
+BuildRequires: libxml2-devel
 Provides: rubygem(%{gemname}) = %{version}
 
 %description
