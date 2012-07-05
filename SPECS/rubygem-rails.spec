@@ -45,7 +45,7 @@ convention over configuration.
 %install
 %{__rm} -rf %{buildroot}
 mkdir -p %{gembuilddir}
-gem install --local --install-dir %{gembuilddir} --force %{SOURCE0}
+gem install --local --install-dir %{gembuilddir} --force %{SOURCE0} --no-ri --nordoc
 mkdir -p %{buildroot}/%{_bindir}
 mv %{gembuilddir}/bin/* %{buildroot}/%{_bindir}
 rmdir %{gembuilddir}/bin
@@ -59,7 +59,6 @@ rmdir %{gembuilddir}/bin
 %{gemdir}/gems/rails-3.0.15/bin/rails
 
 
-%doc %{gemdir}/doc/rails-3.0.15
 %{gemdir}/cache/rails-3.0.15.gem
 %{gemdir}/specifications/rails-3.0.15.gemspec
 
