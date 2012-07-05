@@ -16,6 +16,8 @@ Requires: ruby >= 1.8.7
 Requires: rubygems >= 1.8.10
 BuildRequires: ruby >= 1.8.7
 BuildRequires: rubygems >= 1.8.10
+BuildRequires: libxslt-devel
+BuildRequires: libxml2-devel
 Provides: rubygem(nokogiri) = %{version}
 
 %define gemdir /usr/lib/ruby/gems/1.8
