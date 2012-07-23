@@ -338,7 +338,6 @@ plugins required for Foreman to work.
 
 %prep
 %setup -q -n %{name}
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1 
 
