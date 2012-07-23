@@ -3,7 +3,7 @@
 
 Name:   foreman
 Version:1.0.0
-Release:0.7%{dist}
+Release:1%{dist}
 Summary:Systems Management web application
 
 Group:  Applications/System
@@ -11,7 +11,8 @@ License:GPLv3+
 URL: http://theforeman.org
 Source0: http://github.com/ohadlevy/%{name}/tarball/%{name}-%{version}.tar.bz2
 Source1: foreman.repo
-Patch1: 0001-foreman-initfix.patch
+Source2: foreman.init
+Source3: foreman.sysconfig
 Patch2: 0002-foreman-remove-git-refs-from-gemfiles.patch
 Patch3: 0003-foreman-mv-settings-into-place.patch
 
@@ -351,13 +352,12 @@ install -d -m0755 %{buildroot}%{_localstatedir}/lib/%{name}
 install -d -m0755 %{buildroot}%{_localstatedir}/run/%{name}
 install -d -m0750 %{buildroot}%{_localstatedir}/log/%{name}
 
-install -Dp -m0644 %{confdir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{_initrddir}/%{name}
+install -Dp -m0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -Dp -m0755 %{SOURCE2} %{buildroot}%{_initrddir}/%{name}
 install -Dp -m0644 %{confdir}/logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d
-install -pm 644 %{SOURCE1} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d
+install -pm 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d
 
 cp -p -r app bundler.d config config.ru extras Gemfile lib Rakefile script %{buildroot}%{_datadir}/%{name}
 #chmod a+x %{buildroot}%{_datadir}/%{name}/script/{console,dbconsole,runner}
@@ -472,6 +472,8 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Mon Jul 23 2012 jmontleo@redhat.com 1.0.0-1
+- Update packages for Foreman 1.0 Release and add support for using thin.
 * Wed Jul 18 2012 jmontleo@redhat.com 1.0.0-0.7
 - Updated pacakages for Foreman 1.0 RC5 and Proxy RC2
 * Thu Jul 05 2012 jmontleo@redhat.com 1.0.0-0.6
