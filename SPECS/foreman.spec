@@ -2,8 +2,8 @@
 %global confdir extras/spec
 
 Name:   foreman
-Version:1.0.0
-Release:2%{dist}
+Version:1.0.1
+Release:1%{dist}
 Summary:Systems Management web application
 
 Group:  Applications/System
@@ -471,6 +471,8 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %changelog
+* Thu Aug 09 2012 jmontleo@redhat.com 1.0.1-1
+- Version 1.0.1
 * Sun Aug 05 2012 jmontleo@redhat.com 1.0.0-2
 - Update to pull in fixes
 * Mon Jul 23 2012 jmontleo@redhat.com 1.0.0-1
